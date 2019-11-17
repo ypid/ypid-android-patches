@@ -5,6 +5,7 @@ Disable "Rise volume above recommended level?"
 Confirmed working on:
 
 * Android 9
+* Android 10
 
 project frameworks/base/
 diff --git a/frameworks/base/core/res/res/values/config.xml b/frameworks/base/core/res/res/values/config.xml

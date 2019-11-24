@@ -7,15 +7,28 @@ snoop your strong authentication credentials allowing an adversary to boot and
 decrypt your device against your will.
 
 Changing DEFAULT_STRONG_AUTH_TIMEOUT_MS is not enough. Rather, it has the
-opposite effect for some reason. In my tests, it caused the strong auth to be
+opposite effect. In my tests, it caused the strong auth to be
 required every hour rather than a 42 d interval.
 
+Ref: frameworks/base/services/devicepolicy/java/com/android/server/devicepolicy/DevicePolicyManagerService.java
+
 In my tests, dpm.getRequiredStrongAuthTimeout(null, userId)) returned 3600000.
+
+Note that this patch circumvents the values that DeviceAdmin may provide. In other words, it ignores whatever a MDM would request for the strong auth timeout!
+
+To be clear, this patch is a practical approach, in an ideal world, we would properly use the DeviceAdmin feature.
 
 Confirmed working on:
 
 * Android 9
 * Android 10
+
+Submitted to:
+
+* https://github.com/hashbang/os/pull/32
+* https://github.com/RattlesnakeOS/community_patches/pull/9
+* https://github.com/ypid/ypid-android-patches
+* https://github.com/GrapheneOS/platform_frameworks_base/pull/19
 
 project frameworks/base/
 diff --git a/frameworks/base/core/java/android/app/admin/DevicePolicyManager.java b/frameworks/base/core/java/android/app/admin/DevicePolicyManager.java

@@ -1,0 +1,24 @@
+Do not show that airplane mode is enabled on lock screen
+
+The icon can be removed with the "System UI Tuner", so no need to patch this as
+well.
+
+Confirmed working on:
+
+* Android 10
+
+project frameworks/base/
+diff --git a/frameworks/base/packages/SystemUI/src/com/android/keyguard/CarrierTextController.java b/frameworks/base/packages/SystemUI/src/com/android/keyguard/CarrierTextController.java
+index 3f3d8a5bfa4..2f7ba43d2d3 100644
+--- a/frameworks/base/packages/SystemUI/src/com/android/keyguard/CarrierTextController.java
++++ b/frameworks/base/packages/SystemUI/src/com/android/keyguard/CarrierTextController.java
+@@ -444,8 +444,7 @@ public class CarrierTextController {
+     }
+ 
+     private String getAirplaneModeMessage() {
+-        return mShowAirplaneMode
+-                ? getContext().getString(R.string.airplane_mode) : "";
++        return "";
+     }
+ 
+     /**

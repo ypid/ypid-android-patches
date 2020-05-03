@@ -7,6 +7,10 @@ Confirmed working on:
 * Android 9
 * Android 10
 
+Submitted to:
+
+* https://github.com/GrapheneOS/platform_frameworks_base/pull/27 (https://github.com/rustybird submitted it)
+
 project frameworks/base/
 diff --git a/frameworks/base/core/res/res/values/config.xml b/frameworks/base/core/res/res/values/config.xml
 index 93ffd465dd3..917b0e79dff 100644

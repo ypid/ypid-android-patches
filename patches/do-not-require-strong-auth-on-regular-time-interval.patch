@@ -20,8 +20,9 @@ To be clear, this patch is a practical approach, in an ideal world, we would pro
 
 Confirmed working on:
 
-* Android 9
-* Android 10
+* (Android 9, see history of this patch)
+* (Android 10, see history of this patch)
+* Android 11
 
 Submitted to:
 
@@ -32,10 +33,10 @@ Submitted to:
 
 project frameworks/base/
 diff --git a/frameworks/base/core/java/android/app/admin/DevicePolicyManager.java b/frameworks/base/core/java/android/app/admin/DevicePolicyManager.java
-index f73e13f4dbd..82c05c71e30 100644
+index e2e8049c2980..f38f264a3900 100644
 --- a/frameworks/base/core/java/android/app/admin/DevicePolicyManager.java
 +++ b/frameworks/base/core/java/android/app/admin/DevicePolicyManager.java
-@@ -488,7 +488,7 @@ public class DevicePolicyManager {
+@@ -571,7 +571,7 @@ public class DevicePolicyManager {
       *
       * @hide
       */
@@ -45,26 +46,14 @@ index f73e13f4dbd..82c05c71e30 100644
      /**
       * A {@link android.os.Parcelable} extra of type {@link android.os.PersistableBundle} that
 diff --git a/frameworks/base/services/core/java/com/android/server/locksettings/LockSettingsStrongAuth.java b/frameworks/base/services/core/java/com/android/server/locksettings/LockSettingsStrongAuth.java
-index c4f1f3d7369..f25e2d9b891 100644
+index a102406cc131..c66925732349 100644
 --- a/frameworks/base/services/core/java/com/android/server/locksettings/LockSettingsStrongAuth.java
 +++ b/frameworks/base/services/core/java/com/android/server/locksettings/LockSettingsStrongAuth.java
-@@ -128,18 +128,7 @@ public class LockSettingsStrongAuth {
-     private void handleScheduleStrongAuthTimeout(int userId) {
-         final DevicePolicyManager dpm =
-                 (DevicePolicyManager) mContext.getSystemService(Context.DEVICE_POLICY_SERVICE);
--        long when = SystemClock.elapsedRealtime() + dpm.getRequiredStrongAuthTimeout(null, userId);
--        // cancel current alarm listener for the user (if there was one)
--        StrongAuthTimeoutAlarmListener alarm = mStrongAuthTimeoutAlarmListenerForUser.get(userId);
--        if (alarm != null) {
--            mAlarmManager.cancel(alarm);
--        } else {
--            alarm = new StrongAuthTimeoutAlarmListener(userId);
--            mStrongAuthTimeoutAlarmListenerForUser.put(userId, alarm);
--        }
--        // schedule a new alarm listener for the user
--        mAlarmManager.set(AlarmManager.ELAPSED_REALTIME, when, STRONG_AUTH_TIMEOUT_ALARM_TAG,
--                alarm, mHandler);
-+        Slog.d(TAG, "getRequiredStrongAuthTimeout: " + dpm.getRequiredStrongAuthTimeout(null, userId));
-     }
+@@ -550,7 +550,7 @@ public class LockSettingsStrongAuth {
  
-     private void notifyStrongAuthTrackers(int strongAuthReason, int userId) {
+         @Override
+         public void onAlarm() {
+-            requireStrongAuth(STRONG_AUTH_REQUIRED_AFTER_TIMEOUT, mUserId);
++            // requireStrongAuth(STRONG_AUTH_REQUIRED_AFTER_TIMEOUT, mUserId);
+         }
+     }

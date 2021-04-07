@@ -18,8 +18,42 @@ Confirmed working on:
   Widgets: DatePicker
   Settings: Wi-Fi data usage.
 
+* NOT working on Android 11 for some reason.
+
+  ```
+  make[0]: Making `all' in `data'
+  make[1]: Entering directory '/tmp/tmpP9KtqH-i18n/icu/data'
+  make -f pkgdataMakefile
+  make[1]: *** No rule to make target 'out/tmp/icudata.lst', needed by 'build-local'.  Stop.
+  make[1]: *** Waiting for unfinished jobs....
+  make[2]: Entering directory '/tmp/tmpP9KtqH-i18n/icu/data'
+  rm -rf icupkg.inc
+  make[2]: Leaving directory '/tmp/tmpP9KtqH-i18n/icu/data'
+  make[1]: Leaving directory '/tmp/tmpP9KtqH-i18n/icu/data'
+  make: *** [Makefile:153: all-recursive] Error 2
+  Traceback (most recent call last):
+    File "./updateicudata.py", line 30, in <module>
+      main()
+    File "./updateicudata.py", line 24, in main
+      icuutil.MakeAndCopyIcuDataFiles(icu_build_dir)
+    File "/home/build/build/base/external/icu/tools/icuutil.py", line 134, in MakeAndCopyIcuDataFiles
+      subprocess.check_call(['make', '-j', str(multiprocessing.cpu_count())])
+    File "/usr/lib/python2.7/subprocess.py", line 190, in check_call
+      raise CalledProcessError(retcode, cmd)
+  subprocess.CalledProcessError: Command '['make', '-j', '3']' returned non-zero exit status 2
+  make: *** [Makefile:42: build] Error 1
+  ```
 
 The binary files are not included but they can be generated from this source patch. They are not provided because you should not trust/use binaries some random person (in this case me) is providing. Refer to the docs of external/icu/ for building the locale files.
+
+Tested with:
+
+repo forall --verbose -p external/cldr external/icu -c 'git rev-parse HEAD'
+project external/cldr/
+98dbadea92e9b191c811cb855a38febea2ae3e62
+
+project external/icu/
+98e3f39cf5e2c4677dd73b46036114b1b5763a73
 
 project external/cldr/
 diff --git a/external/cldr/common/main/en_CA.xml b/external/cldr/common/main/en_CA.xml
@@ -661,5 +695,5 @@ index 8b5f01f..56e5a57 100644
 -          <paperSize type="US-Letter"  territories="BZ CA CL CO CR GT MX NI PA PH PR SV US VE"/>
 +          <paperSize type="US-Letter"  territories="BZ CL CO CR GT MX NI PA PH PR SV US VE"/>
      </measurementData>
- 
+
  	<unitPreferenceData>

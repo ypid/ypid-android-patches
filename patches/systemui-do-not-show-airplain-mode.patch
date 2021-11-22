@@ -5,14 +5,16 @@ well.
 
 Confirmed working on:
 
-* Android 10
+* (Android 10, see history of this patch)
+* (Android 11, see history of this patch)
+* Android 12
 
 project frameworks/base/
-diff --git a/frameworks/base/packages/SystemUI/src/com/android/keyguard/CarrierTextController.java b/frameworks/base/packages/SystemUI/src/com/android/keyguard/CarrierTextController.java
-index 3f3d8a5bfa4..2f7ba43d2d3 100644
---- a/frameworks/base/packages/SystemUI/src/com/android/keyguard/CarrierTextController.java
-+++ b/frameworks/base/packages/SystemUI/src/com/android/keyguard/CarrierTextController.java
-@@ -444,8 +444,7 @@ public class CarrierTextController {
+diff --git a/frameworks/base/packages/SystemUI/src/com/android/keyguard/CarrierTextManager.java b/frameworks/base/packages/SystemUI/src/com/android/keyguard/CarrierTextManager.java
+index cfef6cb399ed..bbb71e079053 100644
+--- a/frameworks/base/packages/SystemUI/src/com/android/keyguard/CarrierTextManager.java
++++ b/frameworks/base/packages/SystemUI/src/com/android/keyguard/CarrierTextManager.java
+@@ -422,8 +422,7 @@ public class CarrierTextManager {
      }
  
      private String getAirplaneModeMessage() {

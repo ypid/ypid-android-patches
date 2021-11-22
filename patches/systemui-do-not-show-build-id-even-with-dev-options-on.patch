@@ -2,31 +2,40 @@ Do not show build ID on lock screen with developer options on
 
 As technical people, you might have developer options enabled often but don’t like the "information leak" that gives away that a) you have developer options on and b) what exact Android build you are running. Removing this information from the lock screen is of course security by obscurity but you still might consider doing it.
 
-Even with this patch, an attacker could still get this information by booting into recovery, but this would have the advantage for us that the main OS is shut down then. Also, doing this would be noticeable for the user as strong auth is required after reboot.
+Even with this patch, an attacker could still get this information by booting into recovery, but this would have the advantage for us that the main OS is shut down then. Also, doing this would be noticeable for the user.
 
 Confirmed working on:
 
-* Android 10 (Showing the build ID there has been introduced with Android 10)
+* (Android 10, see history of this patch)
+* (Android 11, see history of this patch)
+* Android 12
 
 project frameworks/base/
-diff --git a/frameworks/base/packages/SystemUI/src/com/android/systemui/qs/QSFooterImpl.java b/frameworks/base/packages/SystemUI/src/com/android/systemui/qs/QSFooterImpl.java
-index 644664ecaee..0c9d9277864 100644
---- a/frameworks/base/packages/SystemUI/src/com/android/systemui/qs/QSFooterImpl.java
-+++ b/frameworks/base/packages/SystemUI/src/com/android/systemui/qs/QSFooterImpl.java
-@@ -165,15 +165,7 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
+diff --git a/frameworks/base/packages/SystemUI/src/com/android/systemui/qs/QSFooterView.java b/frameworks/base/packages/SystemUI/src/com/android/systemui/qs/QSFooterView.java
+index 57438d189b22..0e41d062f1ab 100644
+--- a/frameworks/base/packages/SystemUI/src/com/android/systemui/qs/QSFooterView.java
++++ b/frameworks/base/packages/SystemUI/src/com/android/systemui/qs/QSFooterView.java
+@@ -121,20 +121,9 @@ public class QSFooterView extends FrameLayout {
+ 
      private void setBuildText() {
-         TextView v = findViewById(R.id.build);
-         if (v == null) return;
+         if (mBuildText == null) return;
 -        if (DevelopmentSettingsEnabler.isDevelopmentSettingsEnabled(mContext)) {
--            v.setText(mContext.getString(
+-            mBuildText.setText(mContext.getString(
 -                    com.android.internal.R.string.bugreport_status,
--                    Build.VERSION.RELEASE,
+-                    Build.VERSION.RELEASE_OR_CODENAME,
 -                    Build.ID));
--            v.setVisibility(View.VISIBLE);
+-            // Set as selected for marquee before its made visible, then it won't be announced when
+-            // it's made visible.
+-            mBuildText.setSelected(true);
+-            mShouldShowBuildText = true;
 -        } else {
--            v.setVisibility(View.GONE);
+-            mBuildText.setText(null);
+-            mShouldShowBuildText = false;
+-            mBuildText.setSelected(false);
 -        }
-+        v.setVisibility(View.GONE);
++        mBuildText.setText(null);
++        mShouldShowBuildText = false;
++        mBuildText.setSelected(false);
      }
  
-     private void updateAnimator(int width) {
+     void updateAnimator(int width, int numTiles) {
